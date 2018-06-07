@@ -1,10 +1,9 @@
-package guru.springfamework.repositories;
+package net.h3lv4ul7.springfamework.repositories;
 
-import guru.springfamework.domain.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-/**
- * Created by jt on 9/24/17.
- */
+import net.h3lv4ul7.springfamework.domain.Category;
+
 public interface CategoryRepository extends JpaRepository<Category, Long> {
+	Category findByName(String name);
 }
