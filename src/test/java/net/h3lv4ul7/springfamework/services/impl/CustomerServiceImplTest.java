@@ -1,6 +1,7 @@
 package net.h3lv4ul7.springfamework.services.impl;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -33,7 +34,7 @@ public class CustomerServiceImplTest {
 	}
 
 	@Test
-	public final void testGetCustomerByName() {
+	public final void testGetCustomerByName() throws Exception{
 		Customer customer = new Customer(NAME);
 		customer.setId(ID);
 		
@@ -46,6 +47,24 @@ public class CustomerServiceImplTest {
 	}
 
 	@Test
-	public final void testGetCustomerList() {
+	public final void testGetCustomerList() throws Exception{
+		
+	}
+	
+	@Test
+	public final void TestCreateCustomer() throws Exception{
+		CustomerDto customerDto = new CustomerDto(NAME);
+		customerDto.setId(ID);
+		
+		Customer customer = new Customer(customerDto.getName());
+		customer.setId(ID);
+		
+		when(customerRepository.save(any(Customer.class))).thenReturn(customer);
+		
+		CustomerDto savedCustomer = customerService.createCustomer(customerDto);
+		
+		assertEquals(savedCustomer.getName(), customer.getName());
+		assertEquals("/api/v1/customer/1", savedCustomer.getUrl());
+		
 	}
 }

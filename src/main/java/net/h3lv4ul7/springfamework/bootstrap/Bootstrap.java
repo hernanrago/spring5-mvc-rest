@@ -27,7 +27,7 @@ public class Bootstrap implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		customerRepository.saveAll(createCustomers("Athos", "Porthos", "Aramis"));
-		log.info("data loaded=" + customerRepository.count());
+		log.info("Data loaded=" + customerRepository.count());
 		
 		categoryRepository.saveAll(createCategories("Fruits", "Dried", "Fresh", "Exotic", "Nuts"));
 		log.info("Data loaded=" + categoryRepository.count());
