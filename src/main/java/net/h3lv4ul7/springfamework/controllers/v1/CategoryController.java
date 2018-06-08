@@ -13,9 +13,10 @@ import net.h3lv4ul7.springfamework.services.CategoryService;
 
 @AllArgsConstructor
 @Controller
-@RequestMapping("/api/v1/categories/")
+@RequestMapping(CategoryController.API_V1_CATEGORIES)
 public class CategoryController {
 
+	public static final String API_V1_CATEGORIES = "/api/v1/categories/";
 	private final CategoryService categoryService;
 
 	@GetMapping

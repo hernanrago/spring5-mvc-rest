@@ -16,6 +16,7 @@ import net.h3lv4ul7.springfamework.api.v1.mapper.CustomerMapper;
 @Slf4j
 public class CustomerServiceImpl implements CustomerService {
 	
+	public static final String API_V1_CUSTOMERS = "/api/v1/customers/";
 	private final CustomerRepository customerRepository;
 	private final CustomerMapper customerMapper;
 
@@ -37,7 +38,7 @@ public class CustomerServiceImpl implements CustomerService {
 				.stream()
 				.map(customer -> {
 					CustomerDto customerDto = customerMapper.customerToCustomerDto(customer);
-					customerDto.setUrl("/api/v1/customers/" + customer.getName());
+					customerDto.setUrl(API_V1_CUSTOMERS + customer.getName());
 					return customerDto;
 				})
 				.collect(Collectors.toList());
@@ -47,17 +48,32 @@ public class CustomerServiceImpl implements CustomerService {
 	public CustomerDto createCustomer(CustomerDto customerDto) {
 		CustomerDto savedCustomer = 
 				customerMapper.customerToCustomerDto(customerRepository.save(customerMapper.customerDtoToCustomer(customerDto)));
-		savedCustomer.setUrl("/api/v1/customer/" + customerDto.getId());
+		savedCustomer.setUrl(API_V1_CUSTOMERS + customerDto.getId());
 		return savedCustomer;
 	}
 
 	@Override
 	public CustomerDto updateCustomer(Long id, CustomerDto customerDto) {
 		customerDto.setId(id);
-		customerDto.setUrl("/api/v1/customer/" + customerDto.getId());
+		customerDto.setUrl(API_V1_CUSTOMERS + customerDto.getId());
 		return customerMapper
 				.customerToCustomerDto(customerRepository.save(customerMapper.customerDtoToCustomer(customerDto)));
-		
+	
 	}
 
+	@Override
+	public CustomerDto patchCustomer(Long id, CustomerDto customerDto) {
+		return customerRepository.findById(id).map(customer -> {
+			if(customerDto.getName() != null) {
+				customer.setName(customerDto.getName());
+				customer.setUrl(API_V1_CUSTOMERS + customer.getName());
+			}
+			return customerMapper.customerToCustomerDto(customerRepository.save(customer));
+		}).orElseThrow(RuntimeException::new);
+	}
+
+	@Override
+	public void deleteCustomer(Long id) {
+		customerRepository.deleteById(id);
+	}
 }
